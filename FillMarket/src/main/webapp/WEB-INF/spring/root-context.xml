@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- #1 DBCP Connection -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@1.212.197.133:49164:xe"/>
+		<property name="username" value="PillMarket"/>
+		<property name="password" value="PillMarket"/>
+	</bean>
+	
+	<!-- #2 MyBatis Session create -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/> 
+		<property name="mapperLocations" value="classpath*:mappers/*.xml" /> 
+		<property name="configLocation" value="classpath:mybatis-config.xml"/> 
+	</bean>
+	
+	<!-- #3 SqlSessionTemplate define by mybatis factory -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactoryBean"/>
+	</bean>
+	
+	<!-- #4 transaction manager define -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	
+	<!--  Google Mail  -->
+	<!--  org.springframework.mail.javamail.JavaMailSenderImpl  -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+		<property name="host" value="smtp.gmail.com"/> 
+		<property name="port" value="587" /> 
+		<property name="username" value="CanYouPillMarket@gmail.com"/> 
+		<property name="password" value="Test0824^^"/> 
+		<property name="javaMailProperties"> 
+			<props> 
+				<prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.auth">true    </prop>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.debug">true</prop>
+                <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+                <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+			</props> 
+		</property> 
+	</bean>
+		
+</beans>

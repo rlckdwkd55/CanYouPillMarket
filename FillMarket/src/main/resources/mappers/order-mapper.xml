@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="orderSQL">
+
+	<select id="orderPage" resultType="Cart">
+		SELECT PNO, PNAME, PPRICE, AMOUNT, ORDERPRICE
+		FROM CART
+		WHERE CARTUSERID = #{ cartuserid }
+	</select>
+	
+	<select id="sumPrice" resultType="int">
+		SELECT SUM(ORDERPRICE)
+		FROM CART
+		WHERE CARTUSERID = #{ cartuserid }
+	</select>
+
+	<insert id="insertOrder" parameterType="Order">
+		INSERT INTO ORDERED (ORDERUSERID, TOTALPRICE, ORDERENROLL, CUSTOMERNAME, RECEIVERNAME, ADDRESS1, ADDRESS2, PHONE, ORDERID, FEE, STATUSNO)
+		VALUES (#{ orderuserid }, #{ totalprice }, 
+				SYSDATE, #{ customername }, #{ receivername }, #{ address1 }, #{ address2 }, #{ phone }, #{ orderid }, #{ fee }, DEFAULT)
+	</insert>
+	
+	<!-- 상품 주문 시 장바구니 정보를 OrderDetail 테이블에 추가 (주문 완료 후 장바구니 값 삭제) -->
+	<insert id="insertOrderDetail" parameterType="OrderDetail">
+		INSERT INTO ORDERDETAIL (ORDERDETAILNO, ORDERID, PNO, AMOUNT)
+		SELECT SEQ_ORDERDETAILNO.NEXTVAL, #{ orderid }, PNO, AMOUNT
+		FROM CART
+	</insert>
+	
+	<delete id="deleteCart" parameterType="String">
+		DELETE FROM CART
+		WHERE CARTUSERID = #{ orderuserid }
+	</delete>
+	
+	<!-- 주문내역 리스트 조회 -->
+	<select id="orderList" resultType="OrderList">
+		SELECT O.ORDERUSERID, O.TOTALPRICE, O.ORDERENROLL, O.RECEIVERNAME,
+		P.PNAME, OD.ORDERID, (SELECT COUNT(*) -1 FROM ORDERDETAIL
+		                        WHERE ORDERID = OD.ORDERID
+		                        GROUP BY ORDERID) "CNT"
+		FROM ORDERED O, ORDERDETAIL OD, PRODUCT P
+		WHERE O.ORDERID = OD.ORDERID
+		AND OD.PNO = P.PNO
+		AND OD.ORDERDETAILNO IN (SELECT MIN(ORDERDETAILNO) FROM ORDERDETAIL
+		GROUP BY ORDERID)
+		AND P.PNAME = (SELECT MIN(PNAME) FROM PRODUCT P WHERE PNO = OD.PNO)
+		AND ORDERUSERID = #{ orderuserid }
+	</select>
+	
+	<!-- 주문상세 정보 조회 -->
+	<select id="orderDetail" resultType="OrderList">
+		SELECT O.*, (SELECT STATUS FROM DELIVERY WHERE O.STATUSNO = STATUSNO) "STATUS"
+		FROM ORDERED O
+		WHERE ORDERUSERID = #{ orderuserid }
+		AND ORDERID = #{ orderid }
+	</select>
+	
+	<!-- 주문한 상품 조회 -->
+	<select id="orderDetailProduct" resultType="OrderList">
+		SELECT PA.CHANGENAME, P.PNAME, P.PPRICE,
+	       	   OD.PNO,OD.AMOUNT
+		FROM ORDERDETAIL OD, PRODUCT P, PATTACHMENT PA
+		WHERE PA.PNO = OD.PNO
+		AND PA.PANO = (SELECT MIN(PANO) FROM PATTACHMENT WHERE PNO = OD.PNO)
+		AND OD.PNO = P.PNO
+		AND OD.ORDERID = #{ orderid }
+	</select>
+	
+	<update id="psellUpdate" parameterType="Product">
+		UPDATE PRODUCT P
+		SET PSELL = 
+		    PSELL + (SELECT AMOUNT FROM ORDERDETAIL O WHERE PNO = P.PNO)
+		WHERE PNO = #{ pno }
+	</update>
+	
+	<!-- 주문 시 상품 테이블에 판매량, 재고량 반영 -->
+	<update id="pstockUpdate" parameterType="Product">
+		UPDATE PRODUCT P
+		SET PSTOCK = PSTOCK - PSELL
+		WHERE PNO = #{ pno }
+	</update>
+	 
+	<!-- Access to #{ field } -->
+</mapper>

@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="adminSQL">
+	<!-- <select id="loginMember" parameterType="Member" resultType="Member"> 
+		SELECT * FROM MEMBER WHERE USERID = #{ userId } AND PASSWORD = #{ password 
+		} </select> -->
+	<!-- Access to #{ field } -->
+
+<!--
+	<select id="selectProductList" resultType="Product">
+		SELECT *
+		FROM PRODUCT
+		ORDER BY PENROLL DESC, PNO DESC
+	</select>
+ -->
+ 	
+ 	<select id="selectProductList" resultType="Product">
+		SELECT P.*, a.changename
+		FROM PRODUCT P, PATTACHMENT A
+		WHERE P.PNO = A.PNO
+          AND A.PANO = (SELECT MIN(PANO) FROM PATTACHMENT
+                        WHERE PNO = P.PNO)
+		ORDER BY P.PENROLL DESC, P.PNO DESC
+	</select>
+ 
+	<select id="selectProductTotalContents" resultType="int">
+		SELECT COUNT(*) FROM PRODUCT, PATTACHMENT 
+		WHERE PRODUCT.PNO = PATTACHMENT.PNO
+    	AND PATTACHMENT.PANO = (SELECT MIN(PANO) FROM PATTACHMENT WHERE PNO = PRODUCT.PNO)
+	</select>
+	
+	<insert id="insertProduct" parameterType="Product">
+		INSERT INTO PRODUCT (PNO, CNO, PNAME, PPRICE, PINFO, FPREC, PENROLL, PSTOCK, PSELL)
+		VALUES (SEQ_PNO.nextval, #{cno}, #{pname}, #{pprice}, #{pinfo}, #{fprec}, SYSDATE, #{pstock}, #{psell})
+	</insert>
+	
+	<insert id="insertPAttachment" parameterType="PAttachment">
+		<selectKey keyProperty="pno" resultType="_int" order="BEFORE">
+			SELECT SEQ_PNO.CURRVAL FROM DUAL
+		</selectKey>
+		INSERT INTO PATTACHMENT (PANO, PNO, ORIGINALNAME, CHANGENAME, UPLOADDATE, STATUS)
+		VALUES (SEQ_PANO.NEXTVAL, #{pno}, #{originalname}, #{changename}, SYSDATE, 'Y')
+	</insert>
+
+	<select id="selectOneProduct" parameterType="int" resultType="Product">
+		SELECT * FROM PRODUCT WHERE PNO = #{pno}
+	</select>
+	<select id="selectListAttch" parameterType="int" resultType="PAttachment">
+		SELECT * FROM PATTACHMENT WHERE pno = #{pno}
+	</select>
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM PATTACHMENT WHERE PANO = #{ attNo }
+	</delete>
+
+		
+	<update id="updateProduct" parameterType="Product">
+		UPDATE PRODUCT SET CNO = #{cno}, PNAME = #{ pname }, PSTOCK = #{ pstock }, PPRICE = #{ pprice }, PINFO = #{pinfo}, FPREC = #{fprec}
+		WHERE PNO = #{ pno }
+	</update>
+	
+	<insert id="updateAttachment" parameterType="PAttachment">
+		INSERT INTO PATTACHMENT VALUES (SEQ_PANO.NEXTVAL, #{ pno },
+										#{ originalname }, #{ changename }, SYSDATE, 'Y' )
+	</insert>
+	
+	<delete id="deleteAttachment" parameterType="int">
+		DELETE FROM PATTACHMENT WHERE PNO = #{ pno }
+	</delete>
+	
+	<delete id="deleteProdcut" parameterType="int">
+		DELETE FROM PRODUCT WHERE PNO = #{ pno }
+	</delete>
+
+
+
+
+
+
+
+
+	<!-- 사용자관리 -->
+	
+	<select id="selectUserList" resultType="Member">
+		SELECT * FROM MEMBER
+		ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	<select id="selectUserTotalContents" resultType="int">
+		SELECT COUNT(*) FROM MEMBER
+	</select>
+	
+	<select id="selectUser" parameterType="String" resultType="Member">
+		SELECT * FROM MEMBER WHERE USERID = #{userid}
+	</select>
+
+	<update id="userDelete" parameterType="String">
+		UPDATE MEMBER SET STATUS = 'N' WHERE USERID = #{userId}
+	</update>
+	
+	<update id="userRes" parameterType="String">
+		UPDATE MEMBER SET STATUS = 'Y' WHERE USERID = #{userId}
+	</update>
+	<select id="selectUserNameList" parameterType="String" resultType="Member">
+		SELECT * FROM MEMBER
+		WHERE REGEXP_LIKE(USERNAME, #{userName})
+		ORDER BY ENROLL_DATE DESC
+	</select>
+	
+	<select id="selectUserNameTotalList" resultType="int" parameterType="String">
+		SELECT COUNT(*) FROM MEMBER
+		WHERE REGEXP_LIKE(USERNAME, #{userName})
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- 문의 게시판 -->
+	<select id="selectQNAList" resultType="QNA">
+	<!-- 
+		SELECT * FROM QNA
+		ORDER BY QAUPLOADDATE DESC
+	-->
+	<!-- 
+		SELECT A.*,B.rcontent, COUNT(*) OVER(PARTITION BY B.QANO ORDER BY B.RDATE) AS OVERLAP
+		FROM QNA A, QNARE B
+		WHERE A.QANO = B.QANO(+) AND OVERLAP = 1
+	-->
+		SELECT MAX(A.QANO) AS QANO,
+		        MAX(A.QAUSERID) AS QAUSERID,
+		        MAX(A.QATITLE) AS QATITLE,
+		        MAX(A.QACONTENT)AS QACONTENT,
+		        MAX(A.QAUPLOADDATE)AS QAUPLOADDATE,
+		        MAX(A.STATUS)AS STATUS,
+		        MAX(B.RCONTENT)AS RCONTENT,
+		        COUNT(1) RESUM
+		FROM QNA A, QNARE B
+		WHERE A.QANO = B.QANO(+) AND A.STATUS = 'Y'
+		GROUP BY A.QANO
+	</select>
+	
+	<select id="selectQNATotalContents" resultType="int">
+		SELECT COUNT(*) FROM QNA
+	</select>
+	
+	<select id="selectQNAView" resultType="QNA" parameterType="int">	
+		SELECT * FROM QNA
+		WHERE QANO = #{qano}
+	</select>
+	
+	<select id="selectReply" resultType="QNARE" parameterType="int">
+		SELECT * FROM QNARE
+		WHERE QANO = #{qano}
+		
+	</select>
+	<insert id="insertReply" parameterType="QNARE">
+		INSERT INTO QNARE (RNO, QANO, QAUSERID, RTITLE, RCONTENT, RDATE)
+		VALUES (SEQ_RNO.nextval, #{qano}, #{qauserid}, #{rtitle}, #{rcontent}, DEFAULT)
+		<!-- <selectKey keyProperty="rno" resultType="_int" order="AFTER">
+			SELECT SEQ_RNO.CURRVAL FROM DUAL
+		</selectKey>  -->
+	</insert>
+	
+	<select id="selectQNARE" resultType="QNARE">
+		SELECT A.*, B.* 
+		FROM QNARE A, (SELECT LAST_NUMBER-1 NO
+                FROM USER_SEQUENCES 
+                WHERE SEQUENCE_NAME = 'SEQ_RNO') B
+		WHERE A.RNO = B.NO
+	</select>
+	<update id="deleteQNA" parameterType="int">
+		UPDATE QNA SET status = 'N'
+		WHERE qano = #{qano}
+	</update>
+	
+	<select id="selectAdmin" parameterType="String" resultType="Member">
+		SELECT * FROM MEMBER
+		WHERE USERID = #{userId} AND LEVELTYPE = 2
+	</select>
+	
+	<update id="adminMemoInsert">
+		UPDATE MEMBER SET MEMO = #{memo}
+		WHERE USERID = #{userId}
+	</update>
+	
+	<select id="adminOrderList" parameterType="String" resultType="OrderList">
+		SELECT O.ORDERUSERID, O.TOTALPRICE, O.ORDERENROLL, O.RECEIVERNAME,
+		P.PNAME, OD.ORDERID, (SELECT COUNT(*) -1 FROM ORDERDETAIL
+		                        WHERE ORDERID = OD.ORDERID
+		                        GROUP BY ORDERID) "CNT"
+		FROM ORDERED O, ORDERDETAIL OD, PRODUCT P
+		WHERE O.ORDERID = OD.ORDERID
+		AND OD.PNO = P.PNO
+		AND OD.ORDERDETAILNO IN (SELECT max(ORDERDETAILNO) FROM ORDERDETAIL
+		GROUP BY ORDERID)
+		AND P.PNAME = (SELECT MIN(PNAME) FROM PRODUCT P WHERE PNO = OD.PNO)
+		AND ORDERUSERID = #{ orderuserid }
+	</select>
+	<select id="selectOrderTotal" parameterType="String" resultType="int">
+		select COUNT(*) from ordered
+		where orderuserid = #{userId}
+	</select>
+	
+	<update id="updateUserAuthor" parameterType="Member">
+		UPDATE MEMBER SET LEVELTYPE = #{levelType}
+		WHERE USERID = #{userId}
+	</update>
+	
+	<select id="memberCount" resultType="int">
+		SELECT COUNT(*)FROM MEMBER
+	</select>
+	
+	<select id="productCount" resultType="int">
+		SELECT COUNT(*)FROM PRODUCT
+	</select>
+	<select id="qnaCount" resultType="int">
+		SELECT COUNT(*)FROM QNA
+	</select>
+	
+</mapper>

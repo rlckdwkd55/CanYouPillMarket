@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cartSQL">
+	
+	<!-- 제품 목록에서 장바구니 추가 -->
+	<insert id="insertCart" parameterType="Cart">
+		INSERT INTO CART (CARTNO, CARTUSERID, PNO, AMOUNT, PNAME, PPRICE, ORDERPRICE)
+		VALUES (SEQ_CARTNO.NEXTVAL, #{ cartuserid }, #{ pno }, #{ amount }, #{ pname }, #{ pprice }, #{ orderprice })
+	</insert>
+	
+	<select id="listCart" resultType="Cart">
+		SELECT C.*, PA.CHANGENAME
+		FROM CART C, PATTACHMENT PA
+		WHERE C.PNO = PA.PNO(+)
+          AND (
+          PA.PANO = (SELECT MIN(PANO) FROM PATTACHMENT WHERE PNO = C.PNO)
+          OR PA.PANO IS NULL
+          )
+		  AND C.CARTUSERID = #{ cartuserid }
+		ORDER BY C.CARTNO DESC
+	</select>
+	
+	<select id="sumPrice" resultType="int">
+		SELECT SUM(ORDERPRICE)
+		FROM CART
+		WHERE CARTUSERID = #{ cartuserid }
+	</select>
+	
+	<update id="modifyCart" parameterType="Cart">
+		UPDATE TABLE CART
+		SET AMOUNT = #{ amount }
+		WHERE CARTUSERID = #{ cartuserid }
+		AND CARTNO = #{ cartno }
+	</update>
+	
+	<delete id="deleteCart" parameterType="int">
+		DELETE FROM CART
+		WHERE CARTNO = #{ cartno }
+	</delete>
+	
+	<select id="countCart" resultType="int">
+		SELECT COUNT(*)
+		FROM CART
+		WHERE CARTUSERID = #{ cartuserid }
+		AND PNO = #{ pno }
+	</select>
+	
+	<update id="updateCart" parameterType="Cart">
+		UPDATE CART
+		SET AMOUNT = AMOUNT + #{ amount }, ORDERPRICE = ORDERPRICE + #{ orderprice }
+		WHERE CARTUSERID = #{ cartuserid }
+		AND PNO = #{ pno }
+	</update>
+	
+	<delete id="deleteAll" parameterType="String">
+		DELETE FROM CART
+		WHERE CARTUSERID = #{ cartuserid }
+	</delete>
+	
+	<!-- 제품 상세 페이지에서 장바구니 추가 -->
+	<insert id="cartDetailInsert" parameterType="Cart">
+		INSERT INTO CART (CARTNO, CARTUSERID, PNO, AMOUNT, PNAME, PPRICE, ORDERPRICE)
+		VALUES (SEQ_CARTNO.NEXTVAL, #{ cartuserid }, #{ pno }, #{ amount }, #{ pname }, #{ pprice }, #{ orderprice })
+	</insert>
+	
+	<!-- Access to #{ field } -->
+</mapper>

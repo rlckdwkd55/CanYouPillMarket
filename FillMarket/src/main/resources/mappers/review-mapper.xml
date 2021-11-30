@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reviewSQL">
+
+	<select id="selectReviewList" resultType="Review">
+		SELECT R.*, (SELECT COUNT(*) FROM RATTACHMENT WHERE RENO = R.RENO) FILECOUNT
+		FROM REVIEW R
+		ORDER BY REUPLOADDATE DESC, RENO DESC
+	</select>
+	
+	<select id="selectReviewTotalContents" resultType="int">
+		SELECT COUNT(*) FROM REVIEW
+	</select>
+	
+	<insert id="insertReview" parameterType="Review">
+		INSERT INTO REVIEW (RENO, PNO, RETITLE, REUSERID, RECONTENT)
+		VALUES (SEQ_RENO.NEXTVAL, #{ pno }, #{ retitle }, #{ reuserid }, #{ recontent })
+	</insert>
+	
+	<insert id="insertRAttachment" parameterType="RAttachment">
+		<!--  selectKey -->
+		<!-- 다른 테이블의 정보를 외래키로 사용할 경우 참조 연결 -->
+		<selectKey keyProperty="reno" resultType="_int" order="BEFORE">
+			SELECT SEQ_RENO.CURRVAL FROM DUAL
+		</selectKey>
+		INSERT INTO RATTACHMENT VALUES (SEQ_RANO.NEXTVAL, 
+		  #{ reno }, #{ originalname }, #{ changename }, 
+		  SYSDATE, 'Y' )
+	</insert>
+
+	<select id="selectOneReview" parameterType="int" resultType="Review">
+	SELECT R.*, P.PNAME 
+		FROM REVIEW R, PRODUCT P
+		WHERE R.PNO = P.PNO
+		AND RENO = #{ reno }
+	</select>
+	
+	<select id="selectRAttachmentList" parameterType="int" resultType="RAttachment">
+		SELECT * FROM RATTACHMENT WHERE RENO = #{ reno }
+	</select>
+	
+	
+	<update id="updateReview" parameterType="Review">
+		UPDATE REVIEW SET RETITLE = #{ retitle }, RECONTENT = #{ recontent }
+		WHERE RENO = #{ reno }
+	</update>
+	
+	<insert id="updateRAttachment" parameterType="RAttachment">
+		INSERT INTO RATTACHMENT VALUES (SEQ_RATTACHMENTNO.NEXTVAL, 
+		  #{ reno }, #{ originalname }, #{ changename }, 
+		  SYSDATE, 'Y' )
+	</insert>
+	
+	<delete id="deleteRAttachment" parameterType="int">
+		DELETE FROM RATTACHMENT WHERE RENO = #{ reno } 
+	</delete>
+	
+	<delete id="deleteFile" parameterType="int">
+		DELETE FROM RATTACHMENT WHERE RANO = #{ rano } 
+	</delete>
+	
+	<delete id="deleteReview" parameterType="int">
+		DELETE FROM REVIEW WHERE RENO = #{ reno } 
+	</delete>
+	
+</mapper>
+

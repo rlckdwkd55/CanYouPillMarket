@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+section {
+	width: 1400px;
+	/* background-color: crimson; */
+	margin-right: auto;
+	margin-left: auto;
+	font-family: 'Nanum Gothic', sans-serif;
+}
+
+.top {
+	width: 1250px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+#title {
+	font-size: 32px;
+	color: rgb(231, 133, 110);
+}
+
+.myOrder {
+	border: 2px solid lightgray;
+	padding: 20px;
+	width: 1100px;
+	height: 220px;
+	margin-left: auto;
+	margin-right: auto;
+	/* margin-left: 50px; */
+}
+
+#myOrder_tb {
+	border-collapse: separate;
+	border-spacing: 0 2px;
+	/* border-collapse: collapse; */
+	/* text-align: center; */
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#myOrder_tb tr td:first-child {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+#myOrder_tb tr td {
+	height: 30px;
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+ "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 	<settings>
+ 		<!-- #1 Mybatis settings -->
+ 		<setting name="jdbcTypeForNull" value="NULL"/>
+ 		<setting name="cacheEnabled" value="true"/>
+ 		<setting name="mapUnderscoreToCamelCase" value="true"/>
+ 	</settings>
+ 	
+ 	<!-- #2 Java full package class access to alias  -->
+ 	<typeAliases>
+ 		<!-- <typeAlias alias="Member" type="com.kh.spring.member.model.vo.Member" />  -->
+ 		<typeAlias alias="Product" type="com.fill.market.admin.model.vo.Product"/>
+ 		<typeAlias alias="PAttachment" type="com.fill.market.admin.model.vo.PAttachment"/>
+ 		<typeAlias alias="Member" type="com.fill.market.admin.model.vo.Member"/>
+ 		<typeAlias alias="Cart" type="com.fill.market.cart.model.vo.Cart"/>
+ 		<typeAlias alias="Board" type="com.fill.market.board.model.vo.Board"/>
+ 		<typeAlias alias="QNA" type="com.fill.market.admin.model.vo.QNA"/>
+ 		<typeAlias alias="QNARE" type="com.fill.market.admin.model.vo.QNARE"/>
+ 		<typeAlias alias="Review" type="com.fill.market.review.model.vo.Review"/>
+ 		<typeAlias alias="RAttachment" type="com.fill.market.review.model.vo.RAttachment"/>
+ 		<typeAlias alias="Order" type="com.fill.market.order.model.vo.Order"/>
+ 		<typeAlias alias="OrderDetail" type="com.fill.market.order.model.vo.OrderDetail"/>
+ 		<typeAlias alias="OrderList" type="com.fill.market.order.model.vo.OrderList"/>
+ 	</typeAliases>
+ 	
+ 	<typeHandlers>
+ 		<package name="com.fill.market.common"/>
+ 	</typeHandlers>
+ 	
+ </configuration>

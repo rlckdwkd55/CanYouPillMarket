@@ -1,0 +1,141 @@
+@CHARSET "UTF-8";
+.board_title {
+    border-bottom: 1px solid black;
+    padding: 10px;
+    margin-top: 70px;
+    margin-bottom: 30px;
+}
+
+
+.board_title_a {
+    display: inline-block;
+    margin: 5px;
+    font-size: xx-large;
+    font-weight: 800;
+    color: coral
+}
+
+.board_title_b {
+    display: inline-block;
+    font-size: large;
+    margin: 5px;
+};
+
+
+
+#title{
+    text-align: left;
+    width: 30%;
+}
+#no, #writer, #date{
+    text-align: center;
+    width: 15%;
+}
+
+#title_write{
+    margin-left:50px;
+    margin-bottom:20px;
+    width: 90%;
+}
+
+.form-select{
+    width: 20%;
+}
+
+.textarea{
+    margin-left:50px;
+}
+
+textarea{
+    row-gap: 10%;
+    column-width: 50%;
+}
+.button{
+    margin: 10px;
+    text-align: center;
+}
+.button_view{
+    margin: 10px;
+    text-align: right;
+}
+
+.btn{
+    margin: 10px;
+}
+
+.back{
+    max-width: 100%;
+    width: 1000px;
+    margin: 60px auto;
+
+}
+.back_t{
+    text-align:center;
+}
+.back_t p{
+    font-size: 30px;
+}
+
+.q{
+    width: 1000px;
+    margin: 40px;
+    border-bottom: 1px solid #ccc;
+}
+
+.qa{
+    width: 1000px;
+    margin: 50px;
+}
+
+.q_q, .q_qq{
+    display: inline;
+}
+
+
+.q_q{
+    margin: 5px;
+    font-size: xx-large;
+    font-weight: 800;
+    color: coral
+}
+
+.q_qq{
+    margin: 5px;
+    font-size: large;
+    font-weight: 100;
+    color: black;
+}
+
+.q_a{
+    margin: 20px;
+    font-size: 17px
+}
+.qa_wrap{
+    margin-bottom: 150px;
+}
+.qa_wraplast{
+    margin-bottom: 100px;
+}
+#gender{
+    font-size: 30px;
+
+}
+.inputBox{
+    display: inline-block;
+    height: 100px;
+    width: 100px;
+    margin-right: 10px;
+    font-size: 17px;
+}
+input[type="radio"] {
+    font-size: 20px;
+}
+
+.bt_wrap_update, bt_wrap_update_q{
+    text-align: center;
+}
+.survey_b{
+    display: inline-block;
+}
+
+

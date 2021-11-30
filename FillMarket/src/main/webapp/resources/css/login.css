@@ -1,0 +1,121 @@
+@charset "UTF-8";
+
+@import
+	url('https://fonts.googleapis.com/css?family=Nanum+Gothic:400,700,800')
+	;
+
+.text_box {
+	font-family: 'Nanum Gothic';
+	text-align: center;
+	padding: 10px 0;
+}
+@media ( min-width : 768px) {
+	.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+	}
+}
+
+body {
+	height: 100%;
+}
+
+body {
+	align-items: center;
+	background-color: #ffffff;
+	
+}
+
+wrap_body {
+	background-color: #f5f6f7;
+}
+
+.form-signin {
+	width: 100%;
+	max-width: 400px;
+	padding: 15px;
+	margin: auto;
+	text-align: center;
+}
+
+.form-control {
+	width: 100%;
+	height: 45px;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	justify-content: center;
+	align-items: center;
+}
+
+.form-control:focus {
+	color: #495057;
+	background-color: #fff;
+	border-color: #fff;
+	outline: 0;
+}
+
+#loginBtn {
+	display: block;
+	width: 100%;
+	margin-top: 20px;
+	border: 1px solid black;
+	background-color: rgb(255, 142, 117);
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+#signBtn {
+	width: 100%;
+	margin-top: 20px;
+	border: 1px solid black;
+	font-weight: bold;
+	font-size: 20px;
+	text-decoration-line: none;
+}
+
+#signBtn-a {
+	text-decoration: none;
+	color: black;
+}
+
+.findBox {
+	text-align: right;
+	padding-bottom: 20px;
+}
+
+.findBox a {
+	color: rgb(255, 142, 117);
+}
+
+.findBox span {
+	color: #999;
+}
+
+.bigContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.loginApiBox {
+	margin-top: 0;
+	margin: auto;
+	width: 100%;
+	max-width: 480px;
+	display: flex;
+}
+
+.ApiBtn {
+	display: block;
+	width: 100%;
+	margin-top: 20px;
+}
+
+.apiAnchor {
+        text-decoration: none;
+    }
+
+.btn {
+	height: 45px;
+}
