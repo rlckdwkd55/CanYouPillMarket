@@ -127,7 +127,7 @@
 
 <br>
 
-![Enroll2](https://user-images.githubusercontent.com/83908822/144707190-1898f946-b4f1-4d27-912e-6b1c9e30f1a9.gif)
+![Enroll2](https://user-images.githubusercontent.com/83908822/144707633-c146657b-13a6-4d03-b3bb-80021e14c6e1.gif)
 1. 재미있게 보았던 네이버 정규표현식을 인용하여 정보입력제한
 2. 생년월일의 '월'부분 select태그 안에 option을 주어 dropdwon으로 선택
 3. daumcdn을 활용 최신 주소를 받아올 수 있게 구현
@@ -170,4 +170,25 @@ unction checkId() {
 		}
 ~~~
 
+#
+
+### 간편로그인 
+![간편로그인](https://user-images.githubusercontent.com/83908822/144707372-7e6965f7-7893-4d07-8479-a407e6d7e641.png)
+1. kakaoDeveloper사이트에서 키를 발급받은 후 사용
+2. if속성으로 해당 이메일이 존재한다면 alert창으로 '해당 이메일이 존재합니다'라는 문구 출력
+3. 만약 존재하지 않으면 회원가입창으로 이동
+
+#
+
+### 마이페이지
+![MyPage](https://user-images.githubusercontent.com/83908822/144707433-92a26414-39cc-49f3-827e-0f763a0f0855.png)
+1. 부트스트랩 활용 사이트의 디자인방향에 맞도록 액자형식으로 구성
+2. 상단 'OOO님 환영합니다' 부분 userName을 받아옴  
+
+#
+
+### 회원정보 수정
+![Update](https://user-images.githubusercontent.com/83908822/144707190-1898f946-b4f1-4d27-912e-6b1c9e30f1a9.gif)
+1. userId를 받아온 후 readonly속성을 주어 수정하지 못하도록 구현
+2. 회원가입 시 사용하였던 정규표현식 일부를 가져와 정보입력의 제한부여
 
