@@ -49,7 +49,7 @@
 5. 이모지를 원형으로 배치하여 하단에 깃허브로 이어지는 링크 배치 
 
 *슬라이드 바 구현코드
-~~~ java 
+~~~ jsp
 @keyframes slide {
 			0% {margin-top: 0;}
 
@@ -85,7 +85,7 @@
 ~~~
 
 *캐러셀 부분과 이모지 일부
-~~~ java
+~~~ jsp
 <div class="carousel-inner">
 	<div class="carousel-item active">
 			<video class="bd-placeholder-img" width="100%" height="auto" autoplay loop muted >
@@ -133,7 +133,7 @@
 3. daumcdn을 활용 최신 주소를 받아올 수 있게 구현
 
 *정규표현식 일부
-~~~ java
+~~~ js
 unction checkId() {
 			var idPattern = /^[a-zA-Z0-9_-]{5,20}$/;
 			if (id.value === "") {
@@ -199,7 +199,7 @@ unction checkId() {
 1. 회원정보(이름, 이메일)정보를 입력받아 값이 있다면 그 정보의 userId를 alert창으로 출력
 
 *코드 일부
-~~~ java
+~~~ jsp
 <form
 			action="${pageContext.request.contextPath}/member/memberFindId.do"
 			method="post">
@@ -247,7 +247,7 @@ unction checkId() {
 2. 회원정보(아이디, 이름, 이메일)이 있다면 javaMail API를 활용하여 임의 비밀번호 변경, 업데이트 후 가입시 작성한 이메일로 전송
 
 *코드 일부
-~~~
+~~~jsp
 // 해당 코드를 pom.xml에 등록 후 
 <!-- java mail API -->
 		<dependency>
