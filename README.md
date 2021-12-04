@@ -192,3 +192,100 @@ unction checkId() {
 1. userId를 받아온 후 readonly속성을 주어 수정하지 못하도록 구현
 2. 회원가입 시 사용하였던 정규표현식 일부를 가져와 정보입력의 제한부여
 
+#
+
+### 아이디 찾기 
+![FindID](https://user-images.githubusercontent.com/83908822/144707761-29e702cb-84a6-4d97-856c-fe226e2e80a2.gif)
+1. 회원정보(이름, 이메일)정보를 입력받아 값이 있다면 그 정보의 userId를 alert창으로 출력
+
+*코드 일부
+~~~ java
+<form
+			action="${pageContext.request.contextPath}/member/memberFindId.do"
+			method="post">
+			<div id="content" class="searchI">
+
+				<div class="row mb-2" style="justify-content: center;">
+					<h1 id="myPage_header" class="h3 mb-3 fw-normal mt-5 pt-5">
+						<strong>아이디 찾기</strong>
+					</h1>
+
+					<div style="text-align: center;" class="mb-5">
+						<span>회원가입 시 작성한 이름과 E-MAIL을 입력해주세요.</span>
+					</div>
+				</div>
+
+				<span class="box int_id rounded mb-3"> <input type="text"
+					id="id" class="int" maxlength="20" placeholder="이름"
+					required="required" name="userName">
+				</span> <span class="box int_id rounded"> <input type="text" id="id"
+					class="int" maxlength="20" placeholder="E-MAIL" required="required" name="email">
+				</span>
+
+				<div class="btn_area mt-4" onclick="search_check(1)"
+					checked="checked">
+					<button type="submit" id="btnJoin">
+						<span>아이디 찾기</span>
+					</button>
+				</div>
+				<div class="btn_area mb-5 pb-5">
+
+					<button type="button" id="btnJoin2" onclick="search_check(2)">
+						<span>비밀번호 찾기</span>
+					</button>
+				</div>
+			</div>
+
+		</form>
+~~~
+
+#
+
+### 비밀번호 찾기
+![FindPW](https://user-images.githubusercontent.com/83908822/144707905-0a2ddd27-5da5-48bd-899b-bd64b7ef8fc5.gif)
+1. 함수값을 주어 페이지이동 없이 아이디찾기, 비밀번호 찾기 화면전환
+2. 회원정보(아이디, 이름, 이메일)이 있다면 javaMail API를 활용하여 임의 비밀번호 변경, 업데이트 후 가입시 작성한 이메일로 전송
+
+*코드 일부
+~~~
+// 해당 코드를 pom.xml에 등록 후 
+<!-- java mail API -->
+		<dependency>
+		    <groupId>javax.mail</groupId>
+		    <artifactId>mail</artifactId>
+		    <version>1.4.3</version>
+		</dependency>
+		<dependency> 
+			<groupId>org.springframework</groupId> 
+			<artifactId>spring-context-support</artifactId> 
+			<version>${org.springframework-version}</version> 
+		</dependency>
+		<dependency> 
+			<groupId>com.sun.mail</groupId> 
+			<artifactId>javax.mail</artifactId> 
+			<version>1.5.6</version> 
+		</dependency>
+		
+// 다음 과정을 거친 후 메일 전송
+<select id="selectMemberID" parameterType="Member" resultType="Member">
+		SELECT * FROM MEMBER
+		WHERE USERID = #{ userId }
+		AND USERNAME = #{ userName }
+		AND EMAIL = #{ email }
+	</select>
+	
+	<update id="updateNewPass" parameterType="Member">
+		UPDATE MEMBER SET PASSWORD = #{ password }
+		WHERE USERID = #{ userId }
+	</update>
+	
+	<select id="selectEmailCheck" parameterType="string" resultType="string">
+		SELECT USERID FROM MEMBER
+		WHERE EMAIL = #{ email }
+	</select>
+~~~
+
+#
+
+<img width="1011" alt="ThankYou" src="https://user-images.githubusercontent.com/83908822/144708026-86e2df72-f420-4cce-bc4c-c914208e0170.png">
+
