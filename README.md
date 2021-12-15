@@ -1,4 +1,4 @@
-# STS FinalProject 'CanYouPillMarket'
+# STS FinalProject 'CanYouPillMarket' 
 
 ## [최종보고서 링크](report/3조_final_발표보고서.pdf)
 * 프로젝트 명 : 캔유필마켓(CanYouPillMarket)
@@ -287,5 +287,5 @@ unction checkId() {
 
 #
 
-<img width="1011" alt="ThankYou" src="https://user-images.githubusercontent.com/83908822/144708026-86e2df72-f420-4cce-bc4c-c914208e0170.png">
+<img width="1011" alt="ThankYou" src="https://user-images.githubusercontent.com/83908822/144708026-86e2df72-f420-4cce-bc4c-c914208e0170.png"> 
 
