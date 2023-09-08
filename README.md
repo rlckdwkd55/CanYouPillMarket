@@ -133,7 +133,7 @@
 3. daumcdn을 활용 최신 주소를 받아올 수 있게 구현
 4. 비밀번호 암호화를 통하여 보안향상
 
-*정규표현식 일부
+**정규표현식 일부**
 ~~~ js
 unction checkId() {
 			var idPattern = /^[a-zA-Z0-9_-]{5,20}$/;
@@ -170,9 +170,9 @@ unction checkId() {
 			}
 		}
 ~~~
-
-~~~ java
 **코드 일부**
+~~~ java
+
 @SessionAttributes({ "member" })
 @Controller
 public class MemberController {
@@ -341,13 +341,89 @@ public class MemberController {
 1. userId를 받아온 후 readonly속성을 주어 수정하지 못하도록 구현
 2. 회원가입 시 사용하였던 정규표현식 일부를 가져와 정보입력의 제한부여
 
+**코드일부**
+~~~ java
+/**
+	 * Auth : GiChang Date : 2021-11-22 정보수정 페이지 이동
+	 * 
+	 **/
+	@RequestMapping("/member/memberView.do")
+	public String memberView() {
+
+		return "member/memberView";
+
+	}
+
+	/**
+	 * Auth : GiChang Date : 2021-11-22 회원정보 수정
+	 * 
+	 **/
+	@RequestMapping("/member/memberUpdate.do")
+	public String memberUpdate(Member member, Model model) {
+
+		String pass1 = member.getPassword(); // 원래 비밀번호
+		String pass2 = bcryptPasswordEncoder.encode(pass1); // 비밀번호 암호화
+
+		System.out.println(pass1 + " / " + pass2);
+		member.setPassword(pass2);
+
+		String loc = "/";
+		String msg = "";
+
+		// yyyy-MM-dd 변경
+		String birthCheck = member.getBirthYear() + "-" + member.getBirthMonth() + "-" + member.getBirthDay();
+		System.out.println(birthCheck);
+		member.setBirth(Date.valueOf(birthCheck));
+
+		int result = memberService.updateMember(member);
+
+		System.out.println("받아온 정보 확인 : " + member);
+
+		if (result > 0) {
+			msg = "정보 수정 성공!";
+			model.addAttribute("member", member);
+		} else {
+			msg = "정보 수정 실패!";
+		}
+
+		model.addAttribute("loc", loc);
+		model.addAttribute("msg", msg);
+
+		return "common/msg";
+	}
+
+	/**
+	 * Auth : GiChang Date : 2021-11-22 회원정보 수정
+	 * 
+	 **/
+	@RequestMapping("/member/memberDelete.do")
+	public String memberDelete(Member member, SessionStatus status, Model model) {
+
+		int result = memberService.deleteMember(member.getUserId());
+
+		String loc = "/";
+		String msg = "";
+
+		if (result > 0) {
+			msg = "회원 탈퇴 성공!";
+			status.setComplete();
+		} else {
+			msg = "회원 탈퇴 실패!";
+		}
+
+		model.addAttribute("loc", loc);
+		model.addAttribute("msg", msg);
+
+		return "common/msg";
+	}
+~~~
 #
 
 ### 아이디 찾기 
 ![FindID](https://user-images.githubusercontent.com/83908822/144707761-29e702cb-84a6-4d97-856c-fe226e2e80a2.gif)
 1. 회원정보(이름, 이메일)정보를 입력받아 값이 있다면 그 정보의 userId를 alert창으로 출력
 
-*코드 일부
+**코드 일부**
 ~~~java
 @RequestMapping("/member/memberFindId.do")
 	public String memberFindId(@RequestParam String userName, @RequestParam String email, Model model) {
@@ -397,7 +473,7 @@ public class MemberController {
 1. 함수값을 주어 페이지이동 없이 아이디찾기, 비밀번호 찾기 화면전환
 2. 회원정보(아이디, 이름, 이메일)이 있다면 javaMail API를 활용하여 임의 비밀번호 변경, 업데이트 후 가입시 작성한 이메일로 전송
 
-*코드 일부
+**코드 일부**
 ~~~java
 // 해당 코드를 pom.xml에 등록 후 
 <!-- java mail API -->
