@@ -492,7 +492,8 @@ public class MemberController {
 			<artifactId>javax.mail</artifactId> 
 			<version>1.5.6</version> 
 		</dependency>
-		
+~~~
+~~~ java	
 // 다음 과정을 거친 후 메일 전송
 @RequestMapping("member/memberFindPw.do")
 	public String sendPwMail(
